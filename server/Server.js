@@ -193,19 +193,47 @@ app.post('/api/enrollments/multiple', (req, res) => {
 
 // Create new program
 app.post('/api/programs', (req, res) => {
-  const { name, description = "" } = req.body;
+  const { name, description = "", duration = "" } = req.body;
   if (!name) return res.status(400).send("Program name required");
 
-  const query = `INSERT INTO programs (name, description) VALUES (?, ?)`;
-  db.query(query, [name, description], (err, result) => {
+  const query = `INSERT INTO programs (name, description, duration) VALUES (?, ?, ?)`;
+  db.query(query, [name, description, duration], (err, result) => {
     if (err) {
       console.error("Error inserting program:", err);
       res.status(500).send('Database error');
     } else {
-      res.status(201).json({ id: result.insertId, name, description });
+      res.status(201).json({ id: result.insertId, name, description, duration });
     }
   });
 });
+
+// Delete a client
+app.delete('/api/clients/:id', (req, res) => {
+  const clientId = req.params.id;
+
+  // First delete enrollments related to this client (because of foreign key constraint)
+  const deleteEnrollmentsQuery = `DELETE FROM enrollments WHERE client_id = ?`;
+  db.query(deleteEnrollmentsQuery, [clientId], (err, result) => {
+    if (err) {
+      console.error("Error deleting enrollments:", err);
+      return res.status(500).send('Database error during enrollment deletion');
+    }
+
+    // Now delete the client
+    const deleteClientQuery = `DELETE FROM clients WHERE id = ?`;
+    db.query(deleteClientQuery, [clientId], (err, result) => {
+      if (err) {
+        console.error("Error deleting client:", err);
+        return res.status(500).send('Database error during client deletion');
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).send("Client not found");
+      }
+      res.status(200).json({ message: "Client deleted successfully" });
+    });
+  });
+});
+
 
 // Server
 app.listen(port, () => {

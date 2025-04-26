@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import './ClientProfile.css';
 
 function ClientProfile() {
   const { id } = useParams();
+  const navigate = useNavigate(); // for redirect after delete
   const [client, setClient] = useState(null);
   const [programs, setPrograms] = useState([]);
   const [selectedPrograms, setSelectedPrograms] = useState([]);
@@ -16,7 +17,7 @@ function ClientProfile() {
       setSelectedPrograms(res.data.programs || []);
     });
 
-    // Fetch all available programs for the multi-select dropdown
+    // Fetch all available programs
     axios.get("http://localhost:5000/api/programs").then((res) => {
       setPrograms(res.data);
     });
@@ -24,7 +25,6 @@ function ClientProfile() {
 
   const handleProgramChange = (event) => {
     const { value, checked } = event.target;
-
     setSelectedPrograms((prev) =>
       checked ? [...prev, value] : prev.filter((program) => program !== value)
     );
@@ -36,11 +36,12 @@ function ClientProfile() {
       return;
     }
 
-    // Map selected program IDs to program names
-    const selectedProgramNames = selectedPrograms.map((programId) => {
-      const program = programs.find((p) => p.id.toString() === programId.toString());
-      return program?.name;
-    }).filter(name => name); // remove undefined
+    const selectedProgramNames = selectedPrograms
+      .map((programId) => {
+        const program = programs.find((p) => p.id.toString() === programId.toString());
+        return program?.name;
+      })
+      .filter(name => name); // remove undefined
 
     axios
       .post("http://localhost:5000/api/enrollments/multiple", {
@@ -53,6 +54,20 @@ function ClientProfile() {
       .catch((err) => {
         alert("Error enrolling client: " + err.message);
       });
+  };
+
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this client? This action cannot be undone.")) {
+      axios
+        .delete(`http://localhost:5000/api/clients/${id}`)
+        .then(() => {
+          alert("Client deleted successfully.");
+          navigate("/"); // Redirect to homepage or client list
+        })
+        .catch((err) => {
+          alert("Error deleting client: " + err.message);
+        });
+    }
   };
 
   if (!client) {
@@ -84,6 +99,16 @@ function ClientProfile() {
           ))}
         </div>
         <button onClick={handleEnroll}>Enroll in Selected Programs</button>
+      </div>
+
+      {/* Delete client button */}
+      <div style={{ marginTop: "20px" }}>
+        <button 
+          onClick={handleDelete} 
+          style={{ backgroundColor: "red", color: "white", padding: "10px", border: "none", cursor: "pointer" }}
+        >
+          Delete Client
+        </button>
       </div>
     </div>
   );
