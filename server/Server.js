@@ -23,11 +23,7 @@ db.connect((err) => {
 app.use(cors());
 app.use(express.json());
 
-// ---------------------------------------------
-// ROUTES
-// ---------------------------------------------
-
-// 🔍 Get all or search clients
+// Get all or search clients
 app.get('/api/clients', (req, res) => {
   const search = req.query.search || '';
   const query = `
@@ -52,10 +48,9 @@ app.get('/api/clients', (req, res) => {
   });
 });
 
-// 🔎 Get single client by ID (Newly added)
+// Get single client by ID
 app.get('/api/clients/:id', (req, res) => {
   const clientId = req.params.id;
-
   const query = `
     SELECT c.*, GROUP_CONCAT(p.name) AS programs
     FROM clients c
@@ -64,7 +59,6 @@ app.get('/api/clients/:id', (req, res) => {
     WHERE c.id = ?
     GROUP BY c.id
   `;
-
   db.query(query, [clientId], (err, results) => {
     if (err) {
       console.error("Error fetching client:", err);
@@ -82,7 +76,7 @@ app.get('/api/clients/:id', (req, res) => {
   });
 });
 
-// 📄 Get all programs
+// Get all programs
 app.get('/api/programs', (req, res) => {
   db.query(`SELECT * FROM programs`, (err, results) => {
     if (err) {
@@ -94,7 +88,7 @@ app.get('/api/programs', (req, res) => {
   });
 });
 
-// 🔍 Get program by name
+// Search program by name
 app.get('/api/programs/search', (req, res) => {
   const name = req.query.name;
   if (!name) return res.status(400).send("Program name is required");
@@ -111,7 +105,7 @@ app.get('/api/programs/search', (req, res) => {
   });
 });
 
-// 👤 Register new client
+// Register new client
 app.post('/api/clients', (req, res) => {
   const { first_name, last_name, email, phone, date_of_birth } = req.body;
   if (!first_name || !last_name || !email || !phone || !date_of_birth) {
@@ -139,7 +133,7 @@ app.post('/api/clients', (req, res) => {
   });
 });
 
-// ➕ Enroll client to a program
+// Enroll client to a single program
 app.post('/api/enrollments', (req, res) => {
   const { client_id, program_id } = req.body;
   if (!client_id || !program_id) {
@@ -161,7 +155,43 @@ app.post('/api/enrollments', (req, res) => {
   });
 });
 
-// ➕ Create new program
+// Enroll client to multiple programs
+app.post('/api/enrollments/multiple', (req, res) => {
+  const { client_id, program_names } = req.body;
+  if (!client_id || !program_names || !Array.isArray(program_names) || program_names.length === 0) {
+    return res.status(400).send("Missing client_id or invalid program_names array");
+  }
+
+  // Step 1: Query the program IDs based on the names
+  const query = `SELECT id, name FROM programs WHERE name IN (?)`;
+  db.query(query, [program_names], (err, results) => {
+    if (err) {
+      console.error("Error fetching program IDs:", err);
+      return res.status(500).send('Database error');
+    }
+
+    // Step 2: Ensure all programs exist
+    if (results.length !== program_names.length) {
+      return res.status(404).send("One or more programs not found");
+    }
+
+    // Step 3: Create an array of [client_id, program_id] pairs for insertion
+    const program_ids = results.map(program => program.id);
+    const values = program_ids.map(program_id => [client_id, program_id]);
+
+    // Step 4: Insert into enrollments table
+    const insertQuery = `INSERT IGNORE INTO enrollments (client_id, program_id) VALUES ?`;
+    db.query(insertQuery, [values], (err, result) => {
+      if (err) {
+        console.error("Error enrolling client in multiple programs:", err);
+        return res.status(500).send('Database error');
+      }
+      res.status(201).json({ message: "Client enrolled in multiple programs successfully!" });
+    });
+  });
+});
+
+// Create new program
 app.post('/api/programs', (req, res) => {
   const { name, description = "" } = req.body;
   if (!name) return res.status(400).send("Program name required");
@@ -177,7 +207,7 @@ app.post('/api/programs', (req, res) => {
   });
 });
 
-// ✅ Server
+// Server
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
 });

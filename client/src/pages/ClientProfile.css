@@ -1,54 +1,120 @@
+/* ClientProfile.css */
+
 .section {
-    max-width: 700px;
-    margin: 50px auto;
-    padding: 30px;
-    background: #ffffff;
-    border-radius: 12px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   
-  .section h2 {
-    font-size: 28px;
+  h2 {
+    font-size: 2rem;
     color: #333;
     margin-bottom: 20px;
-    text-align: center;
   }
   
-  .section h3 {
-    font-size: 24px;
-    color: #007bff;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  
-  .section p {
-    font-size: 18px;
+  h3 {
+    font-size: 1.5rem;
     color: #555;
-    margin: 10px 0;
-    text-align: center;
+    margin-bottom: 10px;
   }
   
-  .section p span {
-    font-weight: bold;
-    color: #222;
+  p {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 8px;
   }
   
-  @media (max-width: 600px) {
+  .program-selection {
+    margin-top: 30px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .program-selection h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .program-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .program-list div {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+  }
+  
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  input[type="checkbox"]:hover {
+    transform: scale(1.1);
+  }
+  
+  label {
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  button {
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  @media (max-width: 768px) {
     .section {
-      margin: 20px;
-      padding: 20px;
+      padding: 15px;
     }
   
-    .section h2 {
-      font-size: 24px;
+    h2 {
+      font-size: 1.8rem;
     }
   
-    .section h3 {
-      font-size: 20px;
+    h3 {
+      font-size: 1.3rem;
     }
   
-    .section p {
-      font-size: 16px;
+    p {
+      font-size: 0.9rem;
+    }
+  
+    .program-selection {
+      padding: 15px;
+    }
+  
+    button {
+      padding: 10px 20px;
+      font-size: 0.9rem;
     }
   }
   
