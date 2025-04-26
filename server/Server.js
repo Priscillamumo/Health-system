@@ -191,7 +191,7 @@ app.post('/api/enrollments/multiple', (req, res) => {
   });
 });
 
-// Create new program
+// Create a program
 app.post('/api/programs', (req, res) => {
   const { name, description = "", duration = "" } = req.body;
   if (!name) return res.status(400).send("Program name required");
