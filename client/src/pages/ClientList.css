@@ -1,48 +1,139 @@
+/* ClientList.css */
+
+/* General styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fc;
+  color: #333;
+}
+
+/* Section container */
 .section {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #fdfdfd;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Search input */
+.search-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+}
+
+/* Client list */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+/* Client info */
+h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.client-link {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 600;
+}
+
+.client-link:hover {
+  text-decoration: underline;
+}
+
+p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Program list */
+p.programs {
+  font-size: 1rem;
+  color: #777;
+}
+
+p.programs:empty {
+  color: #bbb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .section {
+    padding: 15px;
+    margin: 20px;
   }
-  
-  .section h2 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 0.5rem;
+
+  h2 {
+    font-size: 1.8rem;
   }
-  
-  .section ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .section li {
-    background-color: #fafafa;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-left: 4px solid #007bff;
-    border-radius: 8px;
-    transition: transform 0.2s, background-color 0.2s;
-  }
-  
-  .section li:hover {
-    transform: translateY(-2px);
-    background-color: #f0f8ff;
-  }
-  
-  .section h3 {
-    margin: 0 0 0.5rem;
-    color: #007bff;
+
+  h3 {
     font-size: 1.3rem;
   }
-  
-  .section p {
-    margin: 0.3rem 0;
-    color: #555;
-    font-size: 0.95rem;
+
+  p {
+    font-size: 0.9rem;
   }
-  
+
+  .search-input {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+  }
+
+  .search-input {
+    font-size: 0.8rem;
+  }
+}

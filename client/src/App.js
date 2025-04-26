@@ -4,7 +4,6 @@ import './App.css';
 
 import RegisterClient from './pages/RegisterClient';
 import CreateProgram from './pages/CreateProgram';
-import SearchClients from './pages/SearchClients';
 import ClientList from './pages/ClientList';
 import ClientProfile from './pages/ClientProfile'; 
 
@@ -33,14 +32,7 @@ function App() {
                   Create Program
                 </NavLink>
               </li>
-              <li>
-                <NavLink 
-                  to="/search-clients" 
-                  className={({ isActive }) => isActive ? "active" : ""}
-                >
-                  Search
-                </NavLink>
-              </li>
+              
               <li>
                 <NavLink 
                   to="/client-list" 
@@ -57,7 +49,6 @@ function App() {
           <Routes>
             <Route path="/" element={<RegisterClient />} />
             <Route path="/create-program" element={<CreateProgram />} />
-            <Route path="/search-clients" element={<SearchClients />} />
             <Route path="/client-list" element={<ClientList />} />
             <Route path="/client/:id" element={<ClientProfile />} /> 
           </Routes>
