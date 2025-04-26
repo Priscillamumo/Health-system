@@ -52,6 +52,36 @@ app.get('/api/clients', (req, res) => {
   });
 });
 
+// 🔎 Get single client by ID (Newly added)
+app.get('/api/clients/:id', (req, res) => {
+  const clientId = req.params.id;
+
+  const query = `
+    SELECT c.*, GROUP_CONCAT(p.name) AS programs
+    FROM clients c
+    LEFT JOIN enrollments e ON c.id = e.client_id
+    LEFT JOIN programs p ON e.program_id = p.id
+    WHERE c.id = ?
+    GROUP BY c.id
+  `;
+
+  db.query(query, [clientId], (err, results) => {
+    if (err) {
+      console.error("Error fetching client:", err);
+      res.status(500).send('Database error');
+    } else if (results.length === 0) {
+      res.status(404).send("Client not found");
+    } else {
+      const row = results[0];
+      const formatted = {
+        ...row,
+        programs: row.programs ? row.programs.split(',') : []
+      };
+      res.json(formatted);
+    }
+  });
+});
+
 // 📄 Get all programs
 app.get('/api/programs', (req, res) => {
   db.query(`SELECT * FROM programs`, (err, results) => {

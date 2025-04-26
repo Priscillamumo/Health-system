@@ -6,6 +6,7 @@ import RegisterClient from './pages/RegisterClient';
 import CreateProgram from './pages/CreateProgram';
 import SearchClients from './pages/SearchClients';
 import ClientList from './pages/ClientList';
+import ClientProfile from './pages/ClientProfile'; 
 
 function App() {
   return (
@@ -15,10 +16,39 @@ function App() {
           <h1 className="logo">Health InfoSys</h1>
           <nav>
             <ul className="nav-links">
-              <li><NavLink to="/" end activeClassName="active">Register</NavLink></li>
-              <li><NavLink to="/create-program" activeClassName="active">Create Program</NavLink></li>
-              <li><NavLink to="/search-clients" activeClassName="active">Search</NavLink></li>
-              <li><NavLink to="/client-list" activeClassName="active">Clients</NavLink></li>
+              <li>
+                <NavLink 
+                  to="/" 
+                  end 
+                  className={({ isActive }) => isActive ? "active" : ""}
+                >
+                  Register
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/create-program" 
+                  className={({ isActive }) => isActive ? "active" : ""}
+                >
+                  Create Program
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/search-clients" 
+                  className={({ isActive }) => isActive ? "active" : ""}
+                >
+                  Search
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/client-list" 
+                  className={({ isActive }) => isActive ? "active" : ""}
+                >
+                  Clients
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </header>
@@ -29,6 +59,7 @@ function App() {
             <Route path="/create-program" element={<CreateProgram />} />
             <Route path="/search-clients" element={<SearchClients />} />
             <Route path="/client-list" element={<ClientList />} />
+            <Route path="/client/:id" element={<ClientProfile />} /> 
           </Routes>
         </main>
       </div>
